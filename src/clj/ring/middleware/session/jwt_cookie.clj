@@ -52,7 +52,9 @@
           (assert (= req-origin origin) "Session origin does not match."))
         (handler (cond-> request
                    ;; when the session is new, add the client info
-                   (= session {}) (assoc-in [:session :client]
+                   (and
+                    req-origin
+                    (= session {})) (assoc-in [:session :client]
                                             {:origin req-origin}))))
       (catch java.lang.AssertionError e
         {:status 401 :body "Unauthorized"}))))

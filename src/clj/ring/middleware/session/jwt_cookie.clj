@@ -47,14 +47,12 @@
   [handler]
   (fn [{:keys [session headers] :as request}]
     (try
-      (let [{req-origin "origin" req-user-agent "user-agent"} headers]
-        (when-let [{:keys [origin user-agent]} (:client session)]
-          (assert (= req-origin origin) "Session origin does not match.")
-          (assert (= req-user-agent user-agent) "Session user-agent does not match"))
+      (let [{req-origin "origin"} headers]
+        (when-let [{:keys [origin]} (:client session)]
+          (assert (= req-origin origin) "Session origin does not match."))
         (handler (cond-> request
                    ;; when the session is new, add the client info
                    (= session {}) (assoc-in [:session :client]
-                                            {:origin req-origin
-                                             :user-agent req-user-agent}))))
+                                            {:origin req-origin}))))
       (catch java.lang.AssertionError e
         {:status 401 :body "Unauthorized"}))))

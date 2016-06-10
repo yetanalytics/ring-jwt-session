@@ -1,4 +1,4 @@
-(defproject com.yetanalytics/ring-jwt-session "0.1.0-SNAPSHOT"
+(defproject com.yetanalytics/ring-jwt-session "0.1.0"
   :description "Provides JWT token-based sessions for ring."
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"

@@ -57,3 +57,22 @@
     (testing "delete-session returns a signed token with an empty session"
       (is (= {}
              (jwt/unsign (delete-session store nil) "seekrit"))))))
+
+(deftest wrap-token-errors-test
+  (testing "wrap-token-errors middleware catches token errors and returns 401"
+    (let [store (jwt-cookie-store "seekrit")
+          handler-token-error (fn [_] (read-session
+                                      store
+                                      (jwt/sign {:foo "bar"
+                                                 :exp (java.util.Date.)}
+                                                "seekrit")))
+          handler-other-error (fn [_] (throw (Exception. "Some other error")))]
+      (is (= {:status 401 :body "Unauthorized"}
+             ((wrap-token-errors handler-token-error) {})))
+
+      (testing "but lets other errors through"
+        (try
+          ((wrap-token-errors handler-other-error) {})
+          (catch Exception ex
+            (is (= "Some other error"
+                   (.getMessage ex)))))))))

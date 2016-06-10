@@ -59,7 +59,7 @@
              (jwt/unsign (delete-session store nil) "seekrit"))))))
 
 (deftest wrap-token-errors-test
-  (testing "wrap-token-errors middleware catches token errors and returns 401"
+  (testing "wrap-token-errors middleware catches token errors and returns 403"
     (let [store (jwt-cookie-store "seekrit")
           handler-token-error (fn [_] (read-session
                                       store
@@ -67,7 +67,7 @@
                                                  :exp (java.util.Date.)}
                                                 "seekrit")))
           handler-other-error (fn [_] (throw (Exception. "Some other error")))]
-      (is (= {:status 401 :body "Unauthorized"}
+      (is (= {:status 403 :body "Forbidden"}
              ((wrap-token-errors handler-token-error) {})))
 
       (testing "but lets other errors through"
@@ -91,8 +91,8 @@
       (is (= good-origin-req
              ((wrap-jwt-origin handler) good-origin-req))))
 
-    (testing "middleware catches origin mismatch and returns 401"
-      (is (= {:status 401 :body "Unauthorized"}
+    (testing "middleware catches origin mismatch and returns 403"
+      (is (= {:status 403 :body "Forbidden"}
              ((wrap-jwt-origin handler) bad-origin-req))))
 
     (testing "when no session origin is present, one is added"

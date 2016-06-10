@@ -27,8 +27,13 @@
 
 
 ;; Middleware
+
+(def forbidden-response
+  {:status 403
+   :body "Forbidden"})
+
 (defn wrap-token-errors
-  "If there is something wrong with the token, return a 401.
+  "If there is something wrong with the token, return a 403.
   Run this outside middleware that decodes/encodes the session."
   [handler]
   (fn [request]
@@ -36,12 +41,12 @@
       (handler request)
       (catch Exception ex
         (if (= (some-> ex ex-data :type) ::invalid-token)
-          {:status 401 :body "Unauthorized"}
+          forbidden-response
           (throw ex))))))
 
 (defn wrap-jwt-origin
   "When origin and user-agent info is present in the session,
-   check it against the corresponding headers. Return 401 on mismatch.
+   check it against the corresponding headers. Return 403 on mismatch.
   Otherwise, set the origin and user agent.
   Make sure this runs inside middleware that uses the cookie store."
   [handler]
@@ -57,4 +62,4 @@
                     (= session {})) (assoc-in [:session :client]
                                             {:origin req-origin}))))
       (catch java.lang.AssertionError e
-        {:status 401 :body "Unauthorized"}))))
+        forbidden-response))))

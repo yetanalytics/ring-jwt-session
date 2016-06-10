@@ -76,3 +76,26 @@
           (catch Exception ex
             (is (= "Some other error"
                    (.getMessage ex)))))))))
+
+(deftest wrap-jwt-origin-test
+  (let [good-origin-req {:session {:client {:origin "http://example.com"}}
+                         :headers {"origin" "http://example.com"}}
+        bad-origin-req {:session {:client {:origin "http://example.com"}}
+                        :headers {"origin" "http://badguy.com"}}
+        new-origin-req {:session {}
+                        :headers {"origin" "http://example.com"}}
+
+        handler identity]
+
+    (testing "middleware lets requests with matchin origins through"
+      (is (= good-origin-req
+             ((wrap-jwt-origin handler) good-origin-req))))
+
+    (testing "middleware catches origin mismatch and returns 401"
+      (is (= {:status 401 :body "Unauthorized"}
+             ((wrap-jwt-origin handler) bad-origin-req))))
+
+    (testing "when no session origin is present, one is added"
+      (is (= {:session {:client {:origin "http://example.com"}}
+              :headers {"origin" "http://example.com"}}
+             ((wrap-jwt-origin handler) new-origin-req))))))

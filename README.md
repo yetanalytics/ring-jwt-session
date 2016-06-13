@@ -4,6 +4,14 @@ Provides a stateless ring session cookie store using JSON Web Tokens. As with en
 
 Please note that this lib is highly experimental and is NOT for production use just yet.
 
+
+## Installation
+Leiningen:
+
+``` clojure
+[com.yetanalytics/ring-jwt-session "0.1.1"]
+```
+
 ## Usage
 
 ``` clojure

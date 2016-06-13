@@ -3,22 +3,18 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 ### Changed
-- Add a new arity to `make-widget-async` to provide a different widget shape.
+- Updated docs and changelog.
 
 ## [0.1.1] - 2016-06-08
 ### Changed
-- Documentation on how to make the widgets.
-
-### Removed
-- `make-widget-sync` - we're all async, all the time.
+- middleware returns 403 rather than 401 if a token is bad.
 
 ### Fixed
-- Fixed widget maker to keep working when daylight savings switches over.
+- `wrap-jwt-origin` only adds an origin if one is present.
 
 ## 0.1.0 - 2016-06-08
 ### Added
-- Files from the new template.
-- Widget maker public API - `make-widget-sync`.
+- Initial api.
 
-[Unreleased]: https://github.com/your-name/ring-jwt-session/compare/0.1.1...HEAD
-[0.1.1]: https://github.com/your-name/ring-jwt-session/compare/0.1.0...0.1.1
+[Unreleased]: https://github.com/yetanalytics/ring-jwt-session/compare/0.1.1...HEAD
+[0.1.1]: https://github.com/yetanalytics/ring-jwt-session/compare/0.1.0...0.1.1

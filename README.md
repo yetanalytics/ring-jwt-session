@@ -1,5 +1,7 @@
 # ring-jwt-session
 
+[![Build Status](https://travis-ci.org/yetanalytics/ring-jwt-session.svg?branch=master)](https://travis-ci.org/yetanalytics/ring-jwt-session)
+
 Provides a stateless ring session cookie store using JSON Web Tokens. As with encrypted cookies, the 'key' is the session itself. The client can read the session (unless you make it `:http-only`), but if it is modified it will fail verification on the server.
 
 Please note that this lib is highly experimental and is NOT for production use just yet.
